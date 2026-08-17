@@ -55,13 +55,29 @@ python scripts/upload_to_oci_object_storage.py
 
 ## 3. Criar a instância Compute (Always Free)
 
+Se o tenancy ainda não tiver nenhuma VCN (comum em conta nova), é preciso criar a rede primeiro:
+VCN → Internet Gateway (attached) → Route Table (rota `0.0.0.0/0` → IGW) → Security List (ingress
+TCP 22 e 8501 liberados) → Subnet pública associada a essa route table/security list. Tudo isso
+pode ser feito pelo assistente "Create VCN with Internet Connectivity" no Console, ou via
+`oci.core.VirtualNetworkClient` do SDK.
+
 Console: **Compute → Instances → Create Instance**.
 
 - **Imagem**: Ubuntu 22.04 (ou 24.04) Minimal.
-- **Shape**: prefira **VM.Standard.A1.Flex** (Ampere ARM, Always Free com até 4 OCPU / 24 GB RAM)
-  em vez do `VM.Standard.E2.1.Micro` (só 1 GB RAM — apertado para Streamlit + Chroma + cliente
-  Gemini rodando juntos). Se a capacidade Ampere A1 estiver esgotada na região, tente novamente
-  mais tarde ou troque de região.
+- **Shape**: prefira **VM.Standard.A1.Flex** (Ampere ARM, Always Free com até 4 OCPU / 24 GB RAM,
+  conforme o limite liberado para o tenancy — contas novas às vezes começam com um limite menor,
+  ex. 2 OCPU/12 GB; confira em Limits, Quotas and Usage antes de lançar).
+  **Atenção**: é comum o lançamento falhar com `Out of host capacity` — a capacidade Ampere
+  gratuita é disputada e esgota rápido em regiões populares. Se isso acontecer, tente novamente
+  em outro momento **ou** caia para o `VM.Standard.E2.1.Micro` (x86, sempre disponível, sem
+  disputa de capacidade). Com só 1 GB de RAM, adicione um swapfile antes de instalar dependências:
+  ```bash
+  sudo fallocate -l 2G /swapfile && sudo chmod 600 /swapfile
+  sudo mkswap /swapfile && sudo swapon /swapfile
+  echo "/swapfile none swap sw 0 0" | sudo tee -a /etc/fstab
+  ```
+  Isso é suficiente para Streamlit + Chroma + cliente Gemini rodando juntos numa base pequena
+  (dezenas de chunks); para uma base bem maior, prefira o A1.
 - **Chave SSH**: gere um par local (`ssh-keygen -t ed25519`) e cole a chave pública na criação.
 - Anote o **IP público** da instância ao final da criação.
 
@@ -78,19 +94,38 @@ Console: **Compute → Instances → Create Instance**.
    sudo ufw reload
    ```
 
+> **Pegadinha conhecida das imagens Ubuntu da Oracle:** mesmo com o Security List e o `ufw`
+> liberados, a porta pode continuar inacessível de fora. As imagens Ubuntu fornecidas pela Oracle
+> vêm com um conjunto de regras `iptables` pré-instalado (`/etc/iptables/rules.v4`) que **antecede**
+> as chains do `ufw` na tabela `INPUT` e só libera explicitamente a porta 22, rejeitando todo o
+> resto antes mesmo do `ufw` ser avaliado. Sintoma: SSH funciona, a aplicação não — mesmo com
+> `ufw status` mostrando a porta liberada. Diagnóstico e correção:
+> ```bash
+> sudo iptables -L INPUT -n --line-numbers   # procure uma regra REJECT antes das chains ufw-*
+> sudo iptables -I INPUT 5 -p tcp -m state --state NEW -m tcp --dport 8501 -j ACCEPT
+> sudo netfilter-persistent save            # persiste a regra para sobreviver a reboot
+> ```
+> (ajuste o número `5` para a posição imediatamente antes da regra `REJECT` no seu `iptables -L INPUT --line-numbers`).
+
 ## 5. Publicar o código e subir a aplicação
 
-Antes deste passo, publique o repositório local num remoto Git (ex: GitHub), já que a instância
-vai clonar de lá.
+Duas formas de levar o código até a instância:
 
-Via SSH na instância (`ssh ubuntu@<IP_PUBLICO>`), use `deploy/oci/bootstrap_vm.sh` como roteiro
-(instala Python, clona o repo, cria o venv e instala as dependências).
+**a) Via Git** (recomendado se o repositório já está num remoto como GitHub): via SSH na
+instância (`ssh ubuntu@<IP_PUBLICO>`), use `deploy/oci/bootstrap_vm.sh` como roteiro (instala
+Python, clona o repo, cria o venv e instala as dependências).
 
-Copie o índice já gerado localmente em vez de reindexar na VM (evita reprocessar embeddings e
-gastar créditos da API de novo):
+**b) Via tar + scp** (mais simples se ainda não há remoto Git configurado): empacote o projeto
+localmente excluindo o que não deve ir (venv, caches, git), envie e extraia na VM:
 ```bash
-scp -r data/chroma_db ubuntu@<IP_PUBLICO>:~/agente_challenge/data/
+tar --exclude='.venv' --exclude='__pycache__' --exclude='.git' --exclude='.pytest_cache' \
+    -czf /tmp/agente_challenge.tar.gz .
+scp /tmp/agente_challenge.tar.gz ubuntu@<IP_PUBLICO>:~/agente_challenge.tar.gz
+ssh ubuntu@<IP_PUBLICO> 'mkdir -p ~/agente_challenge && tar -xzf ~/agente_challenge.tar.gz -C ~/agente_challenge && rm ~/agente_challenge.tar.gz'
 ```
+Isso já leva `data/chroma_db` (índice já gerado localmente) junto — evita reindexar na VM e
+gastar cota da API do Gemini de novo. Depois, na VM: `python3 -m venv .venv && .venv/bin/pip
+install -r requirements.txt`.
 
 Crie o `.env` diretamente na VM (nunca via `scp` do seu `.env` local, para não deixar rastro em
 histórico de shell/scp logs desnecessariamente — copie o conteúdo manualmente por SSH):

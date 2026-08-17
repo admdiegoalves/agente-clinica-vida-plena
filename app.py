@@ -3,6 +3,7 @@
 Só orquestra a UI — toda a lógica de RAG vive em src/. Rodar com:
     streamlit run app.py
 """
+import base64
 from pathlib import Path
 
 import streamlit as st
@@ -26,13 +27,21 @@ st.set_page_config(
 )
 
 if ROBOT_IMAGE_PATH.exists():
-    _, robot_col, _ = st.columns([1, 1, 1])
-    with robot_col:
-        st.image(str(ROBOT_IMAGE_PATH), width=140)
+    robot_b64 = base64.b64encode(ROBOT_IMAGE_PATH.read_bytes()).decode()
+    st.markdown(
+        f'<div style="text-align: center;">'
+        f'<img src="data:image/png;base64,{robot_b64}" width="140" />'
+        f"</div>",
+        unsafe_allow_html=True,
+    )
 
 st.markdown(
     """
     <style>
+    #MainMenu, [data-testid="stMainMenu"], [data-testid="stToolbar"], [data-testid="stDecoration"] {
+        visibility: hidden;
+        display: none;
+    }
     .app-title {
         text-align: center;
         white-space: nowrap;
@@ -60,7 +69,7 @@ st.caption(
 
 with st.sidebar:
     if LOGO_PATH.exists():
-        st.image(str(LOGO_PATH))
+        st.image(str(LOGO_PATH), width=140)
     st.header("Filtros")
     category_options = ["Todas as categorias"] + [CATEGORY_LABELS[c] for c in CATEGORIES]
     label_to_slug = {CATEGORY_LABELS[c]: c for c in CATEGORIES}
