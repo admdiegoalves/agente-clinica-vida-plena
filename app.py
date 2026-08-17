@@ -31,7 +31,25 @@ if ROBOT_IMAGE_PATH.exists():
         st.image(str(ROBOT_IMAGE_PATH), width=140)
 
 st.markdown(
-    "<h1 style='text-align:center; white-space:nowrap;'>Assistente de Conhecimento Interno</h1>",
+    """
+    <style>
+    .app-title {
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 2rem;
+    }
+    @media (max-width: 480px) {
+        .app-title {
+            white-space: normal;
+            font-size: 1.5rem;
+            line-height: 1.25;
+        }
+    }
+    </style>
+    <h1 class="app-title">Assistente de Conhecimento Interno</h1>
+    """,
     unsafe_allow_html=True,
 )
 st.caption(
