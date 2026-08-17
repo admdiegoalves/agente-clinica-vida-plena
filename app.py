@@ -26,9 +26,9 @@ st.set_page_config(
 )
 
 if ROBOT_IMAGE_PATH.exists():
-    _, robot_col, _ = st.columns([1, 2, 1])
+    _, robot_col, _ = st.columns([1, 1, 1])
     with robot_col:
-        st.image(str(ROBOT_IMAGE_PATH), use_container_width=True)
+        st.image(str(ROBOT_IMAGE_PATH), width=140)
 
 st.markdown(
     "<h1 style='text-align:center; white-space:nowrap;'>Assistente de Conhecimento Interno</h1>",
