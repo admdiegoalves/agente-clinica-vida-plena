@@ -1,0 +1,50 @@
+{
+  "rh": {
+    "area": "Recursos Humanos",
+    "responsavel": "Fernanda Lopes",
+    "email": "rh@clinicavidaplena.com.br",
+    "ramal": "4101"
+  },
+  "financeiro": {
+    "area": "Financeiro e Contábil",
+    "responsavel": "Marcelo Andrade",
+    "email": "financeiro@clinicavidaplena.com.br",
+    "ramal": "4102"
+  },
+  "operacional": {
+    "area": "Coordenação de Operações e Atendimento",
+    "responsavel": "Juliana Ramos",
+    "email": "operacoes@clinicavidaplena.com.br",
+    "ramal": "4103"
+  },
+  "legal_compliance": {
+    "area": "Jurídico e Compliance (DPO)",
+    "responsavel": "Rodrigo Nascimento",
+    "email": "compliance@clinicavidaplena.com.br",
+    "ramal": "4104"
+  },
+  "qualidade_biosseguranca": {
+    "area": "Qualidade e Biossegurança",
+    "responsavel": "Dra. Patrícia Menezes",
+    "email": "qualidade@clinicavidaplena.com.br",
+    "ramal": "4105"
+  },
+  "comunicacao_interna": {
+    "area": "Comunicação Interna",
+    "responsavel": "Bruno Teixeira",
+    "email": "comunicacao@clinicavidaplena.com.br",
+    "ramal": "4106"
+  },
+  "estrategico": {
+    "area": "Diretoria Executiva",
+    "responsavel": "Camila Duarte",
+    "email": "diretoria@clinicavidaplena.com.br",
+    "ramal": "4100"
+  },
+  "geral": {
+    "area": "Central de Atendimento ao Colaborador",
+    "responsavel": "Central de Atendimento",
+    "email": "atendimento.interno@clinicavidaplena.com.br",
+    "ramal": "4000"
+  }
+}

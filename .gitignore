@@ -1,0 +1,26 @@
+# Environment / secrets
+.env
+.oci/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Generated data
+data/chroma_db/*
+!data/chroma_db/.gitkeep
+logs/*.jsonl
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local state
+.claude/

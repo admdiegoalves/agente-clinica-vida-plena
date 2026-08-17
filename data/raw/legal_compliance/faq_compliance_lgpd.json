@@ -1,0 +1,25 @@
+{
+  "documento": "FAQ de Compliance e LGPD — Clínica Vida Plena",
+  "itens": [
+    {
+      "pergunta": "Por quanto tempo a clínica guarda o prontuário do paciente?",
+      "resposta": "O prontuário médico é mantido por no mínimo 20 anos, conforme resolução do Conselho Federal de Medicina, mesmo após o fim do vínculo do paciente com a clínica."
+    },
+    {
+      "pergunta": "Um colaborador pode acessar o prontuário de qualquer paciente?",
+      "resposta": "Não. O acesso ao prontuário é restrito aos profissionais diretamente envolvidos no atendimento daquele paciente, com registro de log de acesso auditável."
+    },
+    {
+      "pergunta": "O que fazer se um paciente pedir a exclusão dos seus dados?",
+      "resposta": "A solicitação deve ser encaminhada ao Encarregado de Proteção de Dados (DPO) via compliance@clinicavidaplena.com.br. Dados de prontuário não podem ser excluídos antes do prazo legal de retenção, mas dados de marketing e cadastro complementar podem ser removidos mediante solicitação."
+    },
+    {
+      "pergunta": "É permitido compartilhar dados de pacientes com laboratórios parceiros?",
+      "resposta": "Sim, desde que exista contrato vigente que garanta o mesmo nível de proteção de dados exigido pela clínica, e que o compartilhamento seja estritamente necessário para o atendimento solicitado pelo paciente."
+    },
+    {
+      "pergunta": "O que caracteriza um incidente de segurança de dados na clínica?",
+      "resposta": "Qualquer acesso não autorizado, vazamento, perda ou alteração indevida de dados pessoais ou de saúde. Incidentes devem ser reportados imediatamente ao Jurídico e Compliance pelo ramal 4104."
+    }
+  ]
+}
