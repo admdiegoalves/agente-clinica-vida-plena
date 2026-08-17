@@ -114,7 +114,7 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# edite .env e cole sua GOOGLE_API_KEY (gerada em https://aistudio.google.com/apikey)
+# edite .env e cole sua GOOGLE_API_KEY (em https://aistudio.google.com/apikey)
 ```
 
 ### 3. Gerar os documentos fictícios (já incluídos no repositório, mas reproduzível)
