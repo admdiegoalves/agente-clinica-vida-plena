@@ -33,9 +33,10 @@ CATEGORY_LABELS = {
     "estrategico": "Estratégico",
 }
 
-# Modelos OpenAI
-EMBEDDING_MODEL = "text-embedding-3-small"
-CHAT_MODEL = "gpt-4o-mini"
+# Modelos Google Gemini (via langchain-google-genai) — gerar chave gratuita em
+# https://aistudio.google.com/apikey
+EMBEDDING_MODEL = "models/gemini-embedding-001"
+CHAT_MODEL = "gemini-3.6-flash"
 CHAT_TEMPERATURE = 0
 
 # Chunking
@@ -44,7 +45,11 @@ CHUNK_OVERLAP = 150
 
 # Retrieval
 RETRIEVAL_TOP_K = 6
-SCORE_THRESHOLD = 0.35  # calibrado empiricamente na fase de retrieval (ver scripts/smoke_test_query.py)
+
+# Calibrado empiricamente (scripts/smoke_test_query.py): com o modelo de embedding do Gemini, o
+# score de cosseno roda alto mesmo para trechos irrelevantes (~0.70-0.74 no pior caso). Perguntas
+# dentro do domínio tiveram melhor match >= 0.82; perguntas fora do domínio ficaram <= 0.74.
+SCORE_THRESHOLD = 0.78
 
 # OCR (best-effort, desligado por padrão — ver README para detalhes)
 ENABLE_OCR_FALLBACK = False

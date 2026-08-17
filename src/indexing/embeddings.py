@@ -2,22 +2,23 @@
 import os
 
 from dotenv import load_dotenv
-from langchain_openai import OpenAIEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
 from config import EMBEDDING_MODEL
 
 load_dotenv()
 
-_embeddings: OpenAIEmbeddings | None = None
+_embeddings: GoogleGenerativeAIEmbeddings | None = None
 
 
-def get_embeddings() -> OpenAIEmbeddings:
+def get_embeddings() -> GoogleGenerativeAIEmbeddings:
     global _embeddings
     if _embeddings is None:
-        api_key = os.getenv("OPENAI_API_KEY")
+        api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
             raise RuntimeError(
-                "OPENAI_API_KEY não definida. Copie .env.example para .env e preencha sua chave."
+                "GOOGLE_API_KEY não definida. Copie .env.example para .env e preencha sua chave "
+                "(gere gratuitamente em https://aistudio.google.com/apikey)."
             )
-        _embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL, api_key=api_key)
+        _embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL, google_api_key=api_key)
     return _embeddings

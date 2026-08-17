@@ -60,7 +60,7 @@ Console: **Compute → Instances → Create Instance**.
 - **Imagem**: Ubuntu 22.04 (ou 24.04) Minimal.
 - **Shape**: prefira **VM.Standard.A1.Flex** (Ampere ARM, Always Free com até 4 OCPU / 24 GB RAM)
   em vez do `VM.Standard.E2.1.Micro` (só 1 GB RAM — apertado para Streamlit + Chroma + cliente
-  OpenAI rodando juntos). Se a capacidade Ampere A1 estiver esgotada na região, tente novamente
+  Gemini rodando juntos). Se a capacidade Ampere A1 estiver esgotada na região, tente novamente
   mais tarde ou troque de região.
 - **Chave SSH**: gere um par local (`ssh-keygen -t ed25519`) e cole a chave pública na criação.
 - Anote o **IP público** da instância ao final da criação.
@@ -95,7 +95,7 @@ scp -r data/chroma_db ubuntu@<IP_PUBLICO>:~/agente_challenge/data/
 Crie o `.env` diretamente na VM (nunca via `scp` do seu `.env` local, para não deixar rastro em
 histórico de shell/scp logs desnecessariamente — copie o conteúdo manualmente por SSH):
 ```bash
-nano ~/agente_challenge/.env   # cole OPENAI_API_KEY=...
+nano ~/agente_challenge/.env   # cole GOOGLE_API_KEY=...
 ```
 
 Suba a aplicação com `systemd` (ver `deploy/oci/run_app.service`), que mantém o processo vivo
@@ -116,8 +116,8 @@ teste. Capture print(s) ou um vídeo curto mostrando a URL pública, a conversa 
 ## 7. Depois de capturar a evidência: restrinja ou derrube a instância
 
 A VM fica exposta publicamente **sem autenticação** enquanto estiver de pé, e cada pergunta
-consome a API paga da OpenAI (o Always Free cobre a VM, não a API). Depois de capturar a
-evidência:
+consome a cota da API do Gemini (o Always Free da OCI cobre a VM, não a API do Gemini — o free
+tier do Gemini tem limite de requisições por minuto/dia). Depois de capturar a evidência:
 
 - Restrinja a Security List a apenas o seu IP, **ou**
 - Pare/termine a instância (Console: Compute → Instances → Stop/Terminate).

@@ -6,7 +6,7 @@ mais fácil de logar e depurar do que embutir a lógica de fallback dentro de um
 import time
 
 from langchain_core.output_parsers import StrOutputParser
-from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 from config import CHAT_MODEL, CHAT_TEMPERATURE, RETRIEVAL_TOP_K, SCORE_THRESHOLD
 from src.contacts.contact_lookup import format_contact_line
@@ -16,10 +16,10 @@ from src.retrieval.retriever import retrieve
 _model = None
 
 
-def _get_model() -> ChatOpenAI:
+def _get_model() -> ChatGoogleGenerativeAI:
     global _model
     if _model is None:
-        _model = ChatOpenAI(model=CHAT_MODEL, temperature=CHAT_TEMPERATURE)
+        _model = ChatGoogleGenerativeAI(model=CHAT_MODEL, temperature=CHAT_TEMPERATURE)
     return _model
 
 

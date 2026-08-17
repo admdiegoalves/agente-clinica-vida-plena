@@ -1,4 +1,4 @@
-"""Testes de integração da camada de retrieval — exigem OPENAI_API_KEY e a base já indexada
+"""Testes de integração da camada de retrieval — exigem GOOGLE_API_KEY e a base já indexada
 (rodar scripts/ingest_and_index.py antes). São pulados automaticamente sem a chave configurada.
 """
 import os
@@ -9,8 +9,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 pytestmark = pytest.mark.skipif(
-    not os.getenv("OPENAI_API_KEY"),
-    reason="OPENAI_API_KEY não configurada — testes de retrieval exigem chamadas reais à API",
+    not os.getenv("GOOGLE_API_KEY"),
+    reason="GOOGLE_API_KEY não configurada — testes de retrieval exigem chamadas reais à API",
 )
 
 
@@ -26,7 +26,7 @@ def test_in_domain_question_returns_context():
 def test_out_of_domain_question_has_no_context():
     from src.retrieval.retriever import retrieve
 
-    result = retrieve("Qual é a capital da França?", score_threshold=0.6)
+    result = retrieve("Qual é a capital da França?")
     assert result["has_context"] is False
 
 

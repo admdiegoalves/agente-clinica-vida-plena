@@ -1,6 +1,6 @@
 """Testa retrieval + geração via CLI, sem subir o Streamlit. Também calibra o SCORE_THRESHOLD.
 
-Requer OPENAI_API_KEY em .env e a base já indexada (rodar scripts/ingest_and_index.py antes).
+Requer GOOGLE_API_KEY em .env e a base já indexada (rodar scripts/ingest_and_index.py antes).
 Uso:
     python scripts/smoke_test_query.py
     python scripts/smoke_test_query.py "Quantos dias de férias posso tirar de uma vez?"
