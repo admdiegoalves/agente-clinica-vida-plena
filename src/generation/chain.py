@@ -5,6 +5,7 @@ mais fácil de logar e depurar do que embutir a lógica de fallback dentro de um
 """
 import time
 
+from google.auth.api_key import Credentials as ApiKeyCredentials
 from langchain_core.output_parsers import StrOutputParser
 from langchain_google_genai import ChatGoogleGenerativeAI
 
@@ -20,8 +21,15 @@ _model = None
 def _get_model() -> ChatGoogleGenerativeAI:
     global _model
     if _model is None:
+        # Credenciais explícitas em vez de google_api_key=... — ver comentário equivalente em
+        # src/indexing/embeddings.py sobre o fallback silencioso para Application Default
+        # Credentials em plataformas hospedadas no GCP (ex: Streamlit Community Cloud).
+        api_key = get_google_api_key()
+        if not api_key:
+            raise RuntimeError("GOOGLE_API_KEY não definida.")
         _model = ChatGoogleGenerativeAI(
-            model=CHAT_MODEL, temperature=CHAT_TEMPERATURE, google_api_key=get_google_api_key(),
+            model=CHAT_MODEL, temperature=CHAT_TEMPERATURE,
+            credentials=ApiKeyCredentials(api_key), transport="rest",
         )
     return _model
 
