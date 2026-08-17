@@ -3,6 +3,8 @@
 Só orquestra a UI — toda a lógica de RAG vive em src/. Rodar com:
     streamlit run app.py
 """
+from pathlib import Path
+
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -12,16 +14,31 @@ from src.logging_utils.jsonl_logger import log_execution, log_feedback
 
 load_dotenv()
 
-st.set_page_config(page_title="Assistente Clínica Vida Plena", page_icon="🩺", layout="centered")
+ASSETS_DIR = Path(__file__).resolve().parent / "assets"
+FAVICON_PATH = ASSETS_DIR / "favicon.png"
+LOGO_PATH = ASSETS_DIR / "logo.png"
 
-st.title("🩺 Assistente de Conhecimento Interno — Clínica Vida Plena")
-st.caption(
-    "⚠️ Você está conversando com um **agente de IA**, não com uma pessoa. As respostas são "
-    "geradas a partir dos documentos internos oficiais da clínica; em casos sensíveis, sempre "
-    "confirme com a área responsável indicada nas fontes."
+st.set_page_config(
+    page_title="Assistente Clínica Vida Plena",
+    page_icon=str(FAVICON_PATH) if FAVICON_PATH.exists() else "🩺",
+    layout="centered",
 )
 
+header_col1, header_col2 = st.columns([1, 4], vertical_alignment="center")
+with header_col1:
+    if FAVICON_PATH.exists():
+        st.image(str(FAVICON_PATH))
+with header_col2:
+    st.title("Assistente de Conhecimento Interno")
+    st.caption(
+        "⚠️ Você está conversando com um **agente de IA**, não com uma pessoa. As respostas são "
+        "geradas a partir dos documentos internos oficiais da clínica; em casos sensíveis, sempre "
+        "confirme com a área responsável indicada nas fontes."
+    )
+
 with st.sidebar:
+    if LOGO_PATH.exists():
+        st.image(str(LOGO_PATH))
     st.header("Filtros")
     category_options = ["Todas as categorias"] + [CATEGORY_LABELS[c] for c in CATEGORIES]
     label_to_slug = {CATEGORY_LABELS[c]: c for c in CATEGORIES}
