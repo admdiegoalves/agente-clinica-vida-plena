@@ -17,6 +17,7 @@ load_dotenv()
 ASSETS_DIR = Path(__file__).resolve().parent / "assets"
 FAVICON_PATH = ASSETS_DIR / "favicon.png"
 LOGO_PATH = ASSETS_DIR / "logo.png"
+ROBOT_IMAGE_PATH = ASSETS_DIR / "imagem_robo.png"
 
 st.set_page_config(
     page_title="Assistente Clínica Vida Plena",
@@ -24,17 +25,20 @@ st.set_page_config(
     layout="centered",
 )
 
-header_col1, header_col2 = st.columns([1, 4], vertical_alignment="center")
-with header_col1:
-    if FAVICON_PATH.exists():
-        st.image(str(FAVICON_PATH))
-with header_col2:
-    st.title("Assistente de Conhecimento Interno")
-    st.caption(
-        "⚠️ Você está conversando com um **agente de IA**, não com uma pessoa. As respostas são "
-        "geradas a partir dos documentos internos oficiais da clínica; em casos sensíveis, sempre "
-        "confirme com a área responsável indicada nas fontes."
-    )
+if ROBOT_IMAGE_PATH.exists():
+    _, robot_col, _ = st.columns([1, 2, 1])
+    with robot_col:
+        st.image(str(ROBOT_IMAGE_PATH), use_container_width=True)
+
+st.markdown(
+    "<h1 style='text-align:center; white-space:nowrap;'>Assistente de Conhecimento Interno</h1>",
+    unsafe_allow_html=True,
+)
+st.caption(
+    "⚠️ Você está conversando com um **agente de IA**, não com uma pessoa. As respostas são "
+    "geradas a partir dos documentos internos oficiais da clínica; em casos sensíveis, sempre "
+    "confirme com a área responsável indicada nas fontes.",
+)
 
 with st.sidebar:
     if LOGO_PATH.exists():
