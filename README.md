@@ -17,6 +17,7 @@ conhecimento conversacional, centralizada e sempre disponível para qualquer col
 - [Como rodar localmente](#como-rodar-localmente)
 - [Testes](#testes)
 - [Deploy na OCI](#deploy-na-oci)
+- [Evidência de execução em nuvem](#evidência-de-execução-em-nuvem)
 - [Registro de execução](#registro-de-execução)
 - [Limitações conhecidas](#limitações-conhecidas)
 
@@ -166,6 +167,22 @@ evidência em foto/vídeo). Este projeto usa dois:
 Guia passo a passo completo em [`deploy/oci/setup_compute_instance.md`](deploy/oci/setup_compute_instance.md),
 incluindo criação de bucket, geração de chave de API, provisionamento da instância, abertura de
 porta e execução via `systemd`.
+
+## Evidência de execução em nuvem
+
+Aplicação rodando de fato numa instância OCI Compute (`agente-clinica-vm`, região `sa-saopaulo-1`),
+acessível publicamente e respondendo perguntas reais com base nos documentos indexados.
+
+| | |
+|---|---|
+| ![Interface acessada pela URL pública da OCI](docs/evidencias/print_01_url_publica.png) | ![Instância Compute no Console OCI](docs/evidencias/deploy_OCI.png) |
+| Interface acessada pela URL pública (`163.176.75.40:8501`) | Instância `agente-clinica-vm` no Console OCI |
+| ![Pergunta real sobre procedimento de agendamento](docs/evidencias/print_02_conversa.png) | ![Resposta completa com fontes consultadas](docs/evidencias/print_03_conversa.png) |
+| Pergunta real, respondida com citação de fontes | Resposta completa, com o expander "Fontes consultadas" |
+
+> A instância é mantida **parada** (`Stopped`) fora de uso, para não ficar exposta publicamente
+> sem autenticação nem consumir a cota gratuita da API do Gemini à toa. Pode ser religada a
+> qualquer momento pelo Console OCI (o IP público é preservado entre parar/religar).
 
 ## Registro de execução
 
