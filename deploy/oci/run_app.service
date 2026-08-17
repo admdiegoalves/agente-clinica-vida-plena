@@ -1,0 +1,14 @@
+[Unit]
+Description=Agente de Conhecimento Interno - Clinica Vida Plena (Streamlit)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/agente_challenge
+ExecStart=/home/ubuntu/agente_challenge/.venv/bin/streamlit run app.py --server.port 8501 --server.address 0.0.0.0
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
