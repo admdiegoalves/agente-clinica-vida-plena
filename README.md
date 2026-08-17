@@ -65,9 +65,8 @@ estágio do pipeline separadamente (ver `tests/`).
 | Logging | JSONL append-only |
 | Deploy | OCI Object Storage + OCI Compute (Always Free) |
 
-O LLM e os embeddings usam a **API do Google Gemini** por ter camada gratuita suficiente para
-este projeto — a API da OpenAI foi avaliada primeiro, mas exige créditos pré-pagos. Gere uma
-chave gratuita em [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+O LLM e os embeddings usam a **API do Google Gemini**, que tem camada gratuita suficiente para
+este projeto. Gere uma chave gratuita em [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
 
 ## Estrutura do projeto
 
