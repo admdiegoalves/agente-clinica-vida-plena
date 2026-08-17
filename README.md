@@ -63,10 +63,10 @@ estágio do pipeline separadamente (ver `tests/`).
 | Banco vetorial | ChromaDB (persistente, local) |
 | Interface | Streamlit |
 | Logging | JSONL append-only |
-| Deploy | OCI Object Storage + OCI Compute (Always Free) |
+| Deploy | OCI Object Storage + OCI Compute |
 
-O LLM e os embeddings usam a **API do Google Gemini**, que tem camada gratuita suficiente para
-este projeto. Gere uma chave gratuita em [aistudio.google.com/apikey](https://aistudio.google.com/apikey).
+O LLM e os embeddings usam a **API do Google Gemini**. Gere uma chave em
+[aistudio.google.com/apikey](https://aistudio.google.com/apikey).
 
 ## Estrutura do projeto
 
@@ -114,7 +114,7 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# edite .env e cole sua GOOGLE_API_KEY (gratuita em https://aistudio.google.com/apikey)
+# edite .env e cole sua GOOGLE_API_KEY (gerada em https://aistudio.google.com/apikey)
 ```
 
 ### 3. Gerar os documentos fictícios (já incluídos no repositório, mas reproduzível)
@@ -161,7 +161,7 @@ O desafio exige o uso de ao menos 1 serviço do ecossistema OCI e a execução r
 evidência em foto/vídeo). Este projeto usa dois:
 
 - **OCI Object Storage** — repositório dos documentos originais (`data/raw/`).
-- **OCI Compute (Always Free)** — execução completa da aplicação (Streamlit + RAG + Chroma).
+- **OCI Compute** — execução completa da aplicação (Streamlit + RAG + Chroma).
 
 Guia passo a passo completo em [`deploy/oci/setup_compute_instance.md`](deploy/oci/setup_compute_instance.md),
 incluindo criação de bucket, geração de chave de API, provisionamento da instância, abertura de
@@ -180,8 +180,8 @@ acessível publicamente e respondendo perguntas reais com base nos documentos in
 | Pergunta real, respondida com citação de fontes | Resposta completa, com o expander "Fontes consultadas" |
 
 > A instância é mantida **parada** (`Stopped`) fora de uso, para não ficar exposta publicamente
-> sem autenticação nem consumir a cota gratuita da API do Gemini à toa. Pode ser religada a
-> qualquer momento pelo Console OCI (o IP público é preservado entre parar/religar).
+> sem autenticação nem consumir a cota da API do Gemini à toa. Pode ser religada a qualquer
+> momento pelo Console OCI (o IP público é preservado entre parar/religar).
 
 ## Registro de execução
 
