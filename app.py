@@ -9,9 +9,12 @@ from pathlib import Path
 import streamlit as st
 from dotenv import load_dotenv
 
-from config import CATEGORIES, CATEGORY_LABELS
+from config import CATEGORIES, CATEGORY_LABELS, RAW_DOCS_DIR
 from src.generation.chain import answer_question
+from src.ingestion.loaders import load_document
+from src.indexing.vector_store import collection_count, upsert_chunks
 from src.logging_utils.jsonl_logger import log_execution, log_feedback
+from src.processing.chunking import build_chunks
 
 load_dotenv()
 
@@ -25,6 +28,21 @@ st.set_page_config(
     page_icon=str(FAVICON_PATH) if FAVICON_PATH.exists() else "🩺",
     layout="centered",
 )
+
+
+@st.cache_resource(show_spinner="Preparando a base de conhecimento pela primeira vez...")
+def ensure_indexed():
+    """Indexa data/raw/ no Chroma se a collection estiver vazia — cobre o primeiro boot em
+    ambientes onde data/chroma_db/ não é versionado (ex: Streamlit Community Cloud)."""
+    if collection_count() > 0:
+        return
+    for file_path in sorted(RAW_DOCS_DIR.rglob("*.*")):
+        units = load_document(file_path)
+        chunks = build_chunks(file_path, units)
+        upsert_chunks(chunks)
+
+
+ensure_indexed()
 
 if ROBOT_IMAGE_PATH.exists():
     robot_b64 = base64.b64encode(ROBOT_IMAGE_PATH.read_bytes()).decode()
