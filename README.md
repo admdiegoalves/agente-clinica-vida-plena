@@ -9,6 +9,8 @@ JSON, HTML) e múltiplas áreas da empresa (RH, Financeiro, Operacional, Legal/C
 Qualidade/Biossegurança, Comunicação Interna e Estratégico), funcionando como base de
 conhecimento conversacional, centralizada e sempre disponível para qualquer colaborador.
 
+**🔗 Aplicação no ar:** [agente-clinica-vida-plena.streamlit.app](https://agente-clinica-vida-plena.streamlit.app/)
+
 ## Sumário
 
 - [Arquitetura](#arquitetura)
